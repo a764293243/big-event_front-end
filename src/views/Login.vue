@@ -9,6 +9,52 @@ const registerData = ref({
     password: '',
     rePassword: ''
 })
+
+//校验密码的函数
+/**
+ * 校验确认密码是否与密码一致
+ * @param {Object} rule - 验证规则对象
+ * @param {string} value - 当前输入的值
+ * @param {Function} callback - 验证完成后的回调函数
+ */
+const checkRePassword = (rule, value, callback) => {
+    // 判断是否为空
+    if(value === ''){
+        callback(new Error('请再次输入密码'))
+    }
+    // 判断两次密码是否一致
+    else if(value !== registerData.value.password){
+        callback(new Error('两次密码不一致'))
+    }
+    // 验证通过
+    else{
+        callback()
+    }
+}
+
+//定义表单校验规则
+// 定义表单验证规则对象
+const rules = {
+    // 用户名验证规则
+    username: [
+        // 必填项验证
+        { required: true, message: '请输入用户名', trigger: 'blur' },
+        // 长度验证：5-16位字符
+        { min: 5, max: 16, message: '长度为5~16位非空字符', trigger: 'blur' }
+    ],
+    // 密码验证规则
+    password: [
+        // 必填项验证
+        { required: true, message: '请输入密码', trigger: 'blur' },
+        // 长度验证：5-16位字符
+        { min:5, max:16, massage:"长度为5~16位非空字符", trigger:"blur"}
+    ],
+    // 确认密码验证规则
+    rePassword: [
+        // 使用自定义验证函数验证两次密码是否一致
+        { validator: checkRePassword, trigger: 'blur' }
+    ]
+}
 </script>
 
 <template>
