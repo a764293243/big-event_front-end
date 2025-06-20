@@ -55,6 +55,20 @@ const rules = {
         { validator: checkRePassword, trigger: 'blur' }
     ]
 }
+
+//调用后台接口，完成注册
+//先获取定义好的api
+import { userRegisterService } from '@/api/user.js'
+const register = async () => {
+    let result = await userRegisterService(registerData.value);
+    if(result.code === 0){
+        //成功了
+        alert(result.message ? result.message : '注册成功');
+    }
+    else {
+        alert('注册失败');
+    }
+}
 </script>
 
 <template>
@@ -62,22 +76,22 @@ const rules = {
         <el-col :span="12" class="bg"></el-col>
         <el-col :span="6" :offset="3" class="form">
             <!-- 注册表单 -->
-            <el-form ref="form" size="large" autocomplete="off" v-if="isRegister">
+            <el-form ref="form" size="large" autocomplete="off" v-if="isRegister" :model="registerData" :rules="rules"> 
                 <el-form-item>
                     <h1>注册</h1>
                 </el-form-item>
-                <el-form-item>
+                <el-form-item prop="username">
                     <el-input :prefix-icon="User" placeholder="请输入用户名" v-model="registerData.username"></el-input>
                 </el-form-item>
-                <el-form-item>
+                <el-form-item prop="password">
                     <el-input :prefix-icon="Lock" type="password" placeholder="请输入密码" v-model="registerData.password"></el-input>
                 </el-form-item>
-                <el-form-item>
+                <el-form-item prop="rePassword">
                     <el-input :prefix-icon="Lock" type="password" placeholder="请输入再次密码" v-model="registerData.rePassword" ></el-input>
                 </el-form-item>
                 <!-- 注册按钮 -->
                 <el-form-item>
-                    <el-button class="button" type="primary" auto-insert-space>
+                    <el-button class="button" type="primary" auto-insert-space @click="register">
                         注册
                     </el-button>
                 </el-form-item>
