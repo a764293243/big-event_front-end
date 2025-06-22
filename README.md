@@ -88,6 +88,21 @@ npm run build
 - 使用Element Plus的Message组件替代alert
 - 添加表单验证和错误处理
 
+### 响应拦截器逻辑错误问题 (已解决)
+**问题描述**: `src/utils/request.js` 中的响应拦截器存在多余的return语句
+
+**原因分析**:
+1. 在响应拦截器的成功处理函数中，存在一个永远不会执行到的 `return result.data` 语句
+2. 这个多余的return语句位于 `else` 分支之后，导致代码逻辑不清晰
+
+**解决方案**:
+1. 删除多余的 `return result.data` 语句
+2. 确保响应拦截器的逻辑清晰：成功时返回 `result.data`，失败时返回 `Promise.reject(result)`
+
+**修改内容**:
+- 删除 `src/utils/request.js` 第32行的多余return语句
+- 优化代码逻辑，确保每个分支都有明确的返回值
+
 ## 注意事项
 
 1. 确保后端服务器运行在 `http://localhost:8080`

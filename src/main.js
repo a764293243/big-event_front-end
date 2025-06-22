@@ -9,6 +9,8 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 // 导入axios用于发送HTTP请求
 import axios from 'axios'
+// 导入路由器
+import router from '@/router'
 
 // 创建Vue应用实例
 const app = createApp(App)
@@ -17,7 +19,8 @@ const app = createApp(App)
 app.use(ElementPlus)
 
 // 配置axios
-app.config.globalProperties.$axios = axios
-
+app.config.globalProperties.$axios = axios;
+// 使用路由器
+app.use(router);
 // 挂载应用
 app.mount('#app')

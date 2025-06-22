@@ -18,6 +18,9 @@ const baseURL = '/api';
  */
 const instance = axios.create({ baseURL });
 
+//导入element-plus的message组件
+import { ElMessage } from 'element-plus';
+
 /**
  * 配置响应拦截器
  * 用于统一处理响应数据和错误
@@ -25,8 +28,15 @@ const instance = axios.create({ baseURL });
 instance.interceptors.response.use(
     // 成功响应处理
     result => {
-        // 直接返回响应数据，简化后续处理
-        return result.data;
+        if(result.data.code === 0){
+            return result.data.data;
+        }
+        else {
+            //操作失败
+            // alert(result.data.message ? result.data.message : '服务异常');
+            ElMessage.error(result.data.message ? result.data.message : '服务异常')
+            return Promise.reject(result.data);
+        }
     },
     // 错误响应处理
     err => {
