@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 //导入布局组件
 import LayoutVue from '@/views/Layout.vue'
-import LoginVue from '@/views/Login.vue'
 import ArticleCategoryVue from '@/views/article/ArticleCategory.vue'
 import ArticleManageVue from '@/views/article/ArticleManage.vue'
 import UserAvatarVue from '@/views/user/UserAvatar.vue'
@@ -12,8 +11,13 @@ import UserInfoVue from '@/views/user/UserInfo.vue'
 //定义路由关系
 const routes = [
     {
+        // 这里使用了路由懒加载（异步加载组件），只有当访问 /login 路由时，才会去加载 Login.vue 组件
+        // 这样可以减少首次加载时需要加载的资源，提高页面加载速度
+        // 如果你直接 import LoginVue from '@/views/Login.vue'，则会在项目启动时就加载该组件
+        // 但如果你用 component: LoginVue，且 LoginVue 没有被正确导入，就会出现未加载的情况
+        // 推荐如下写法，确保 /login 路由访问时一定能加载到组件
         path: '/login',
-        component: LoginVue
+        component: () => import("@/views/Login.vue")
     },
     {
         path: '/',

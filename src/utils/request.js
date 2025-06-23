@@ -37,6 +37,11 @@ instance.interceptors.request.use(
     }
 )
 
+// 不能直接在这里使用useRouter，因为useRouter只能在setup函数或Vue组件的setup上下文中使用，
+// 在这个文件（非组件、非setup环境）中无法获取到router实例。
+// 正确做法是直接从你在main.js中创建的router实例导入使用。
+// 例如：在src/main.js中已经创建了router，可以在这里直接import router
+import router from '@/router';
 /**
  * 配置响应拦截器
  * 用于统一处理响应数据和错误
@@ -57,24 +62,15 @@ instance.interceptors.response.use(
     },
     // 错误响应处理
     err => {
-        // 显示详细的错误信息，帮助调试
-        console.error('请求错误详情:', err);
-        if (err.response) {
-            // 服务器返回了错误状态码
-            console.error('错误状态码:', err.response.status);
-            console.error('错误数据:', err.response.data);
-            alert(`请求失败: ${err.response.status} - ${err.response.data?.message || '未知错误'}`);
-        } else if (err.request) {
-            // 请求已发出但没有收到响应
-            console.error('网络错误:', err.request);
-            alert('网络连接失败，请检查网络连接');
-        } else {
-            // 其他错误
-            console.error('其他错误:', err.message);
-            alert(`请求配置错误: ${err.message}`);
+        //判断响应状态码，如果是401，则说明未登录，提示请登录并且跳转到登录页面
+        if( err.response.status === 401 ) {
+            ElMessage.error('请先登录');
+            router.push('/login');
         }
-        // 将错误传递给调用方处理
-        return Promise.reject(err);
+        else {
+            // 将错误传递给调用方处理
+            return Promise.reject(err);
+        }
     }
 );
 
