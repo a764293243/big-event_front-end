@@ -20,6 +20,22 @@ const instance = axios.create({ baseURL });
 
 //导入element-plus的message组件
 import { ElMessage } from 'element-plus';
+// 配置请求拦截器
+import { useTokenStore } from '@/stores/token';
+instance.interceptors.request.use(
+    config => {//请求前的回调
+        const tokenStore = useTokenStore();
+        //如果有token，就添加到请求头中
+        if( tokenStore.token ) {
+            config.headers.Authorization = tokenStore.token;
+        }
+        return config;
+    },
+    err =>  {
+        //请求错误时候的回调
+        Promise.reject(err);
+    }
+)
 
 /**
  * 配置响应拦截器
@@ -29,7 +45,8 @@ instance.interceptors.response.use(
     // 成功响应处理
     result => {
         if(result.data.code === 0){
-            return result.data.data;
+            // console.log("result.data.data:" + result.data.data);
+            return result.data;    
         }
         else {
             //操作失败

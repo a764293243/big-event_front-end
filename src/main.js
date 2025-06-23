@@ -11,10 +11,18 @@ import 'element-plus/dist/index.css'
 import axios from 'axios'
 // 导入路由器
 import router from '@/router'
-
+// 导入pinia
+import { createPinia } from 'pinia'
+// 导入pinia持久化插件，用于在刷新页面后依然保留pinia中的状态数据
+import { createPersistedState } from 'pinia-persistedstate-plugin'
+const persist = createPersistedState();
+const pinia = createPinia();
+//注意是pinia使用该插件！
+pinia.use(persist);
 // 创建Vue应用实例
 const app = createApp(App)
 
+app.use(pinia)
 // 使用Element Plus
 app.use(ElementPlus)
 

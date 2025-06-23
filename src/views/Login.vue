@@ -78,6 +78,8 @@ const register = async () => {
 //表单数据校验(复用注册表单的校验规则)
 //登录函数
 import { useRouter } from 'vue-router'
+import { useTokenStore } from '@/stores/token';
+const tokenStore = useTokenStore();
 const router = useRouter();
 const login = async () => {
     //调用接口，完成登录
@@ -89,6 +91,8 @@ const login = async () => {
     //     alert("登录失败");
     // }
     // alert(result.message ? result.message : '登录成功');
+    //把得到的token存储到pinia中
+    tokenStore.setToken(result.data);
     ElMessage.success(result.message ? result.message : '登录成功');
     //跳转到首页
     router.push('/');
