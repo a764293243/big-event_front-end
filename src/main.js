@@ -15,6 +15,9 @@ import router from '@/router'
 import { createPinia } from 'pinia'
 // 导入pinia持久化插件，用于在刷新页面后依然保留pinia中的状态数据
 import { createPersistedState } from 'pinia-persistedstate-plugin'
+// 导入Element Plus的中文语言包
+import locale from 'element-plus/dist/locale/zh-cn.mjs'
+
 const persist = createPersistedState();
 const pinia = createPinia();
 //注意是pinia使用该插件！
@@ -23,8 +26,8 @@ pinia.use(persist);
 const app = createApp(App)
 
 app.use(pinia)
-// 使用Element Plus
-app.use(ElementPlus)
+// 使用Element Plus,同时设置分页条为中文
+app.use(ElementPlus,{locale})
 
 // 配置axios
 app.config.globalProperties.$axios = axios;
