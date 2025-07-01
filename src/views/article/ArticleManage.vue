@@ -148,12 +148,13 @@ const uploadSuccess = (result) => {
     articleModel.value.coverImg = result.data;
 }
 
+//用于判断是添加还是修改文章
+let drawerTitle = "添加文章";
+
 //添加文章
 import { articleAddService } from '@/api/article'
 import { ElMessage } from 'element-plus'
-const addArticle = async (clickState) => {
-    //把发布状态赋值给数据模型
-    articleModel.value.state = clickState;
+const addArticle = async () => {
     //调用接口
     let result = await articleAddService(articleModel.value);
     ElMessage.success(result.message ? result.message : '添加成功');
@@ -163,7 +164,45 @@ const addArticle = async (clickState) => {
     //刷新当前列表
     articleList();
 }
-onMounted(() => {
+
+//修改文章
+import { articleUpdateService } from '@/api/article'
+
+//点击“文章修改”按钮后触发事件
+const editClick = (articleData) => {
+    //设置为修改文章
+    drawerTitle = '修改文章';
+    visibleDrawer.value = true;
+    // 将选中的文章数据赋值到表单模型，实现回显
+    articleModel.value.title = articleData.title;
+    articleModel.value.categoryId = articleData.categoryId;
+    articleModel.value.coverImg = articleData.coverImg;
+    articleModel.value.content = articleData.content;
+    articleModel.value.state = articleData.state;
+    articleModel.value.id = articleData.id;
+}
+
+//修改文章函数
+const editArticle = async () => {
+    console.log(articleModel.value);
+    //更新文章
+    let result = await articleUpdateService(articleModel.value);
+    ElMessage.success(result.message ? result.message : '修改成功');
+    //抽屉消失
+    visibleDrawer.value = false;
+    //刷新文章列表
+    articleList();
+}
+
+//上传文章（添加或修改）
+const inputArticle = (clickState) => {
+    //把发布状态赋值给数据模型
+    articleModel.value.state = clickState;
+    if( drawerTitle == '添加文章' ) addArticle();
+    else if( drawerTitle == '修改文章' ) editArticle();
+
+} 
+onMounted(() => { 
     //开始时候调用
     articleCategoryList();
     articleList();
@@ -174,9 +213,9 @@ onMounted(() => {
     <el-card class="page-container">
         <template #header>
             <div class="header">
-                <span>管理鸡毛 </span>
+                <span>文章管理 </span>
                 <div class="extra">
-                    <el-button type="primary" @click="visibleDrawer=true">添加文章</el-button>
+                    <el-button type="primary" @click="visibleDrawer=true; drawerTitle='添加文章'">添加文章</el-button>
                 </div>
             </div>
         </template>
@@ -215,7 +254,7 @@ onMounted(() => {
             <el-table-column label="状态" prop="state"></el-table-column>
             <el-table-column label="操作" width="100">
                 <template #default="{ row }">
-                    <el-button :icon="Edit" circle plain type="primary"></el-button>
+                    <el-button :icon="Edit" circle plain type="primary" @click="editClick(row)"></el-button>
                     <el-button :icon="Delete" circle plain type="danger"></el-button>
                 </template>
             </el-table-column>
@@ -228,7 +267,7 @@ onMounted(() => {
             layout="jumper, total, sizes, prev, pager, next" background :total="total" @size-change="onSizeChange"
             @current-change="onCurrentChange" style="margin-top: 20px; justify-content: flex-end" />
         <!-- 抽屉 -->
-        <el-drawer v-model="visibleDrawer" title="添加文章" direction="rtl" size="50%">
+        <el-drawer v-model="visibleDrawer" :title="drawerTitle" direction="rtl" size="50%">
             <!-- 添加文章表单 -->
             <el-form :model="articleModel" label-width="100px" >
                 <el-form-item label="文章标题" >
@@ -266,8 +305,8 @@ onMounted(() => {
                     </div>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="addArticle('已发布')">发布</el-button>
-                    <el-button type="info" @click="addArticle('草稿')">草稿</el-button>
+                    <el-button type="primary" @click="inputArticle('已发布')">发布</el-button>
+                    <el-button type="info" @click="inputArticle('草稿')">草稿</el-button>
                 </el-form-item>
             </el-form>
         </el-drawer>
