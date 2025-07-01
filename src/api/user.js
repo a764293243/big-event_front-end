@@ -24,3 +24,16 @@ export const userLoginService = (loginData) => {
 export const userInfoService = () => {
     return request.get('/user/userInfo')
 }
+
+//修改个人信息
+export const userInfoUpdateService = (userInfoData) => {
+    return request.put('/user/update', userInfoData)
+}
+
+//修改头像
+export const userAvatarUpdateService = (avatarUrl) => {
+    //可以直接拼接，也可以通过param
+    const params = new URLSearchParams();
+    params.append('avatarUrl', avatarUrl);
+    return request.patch('/user/updateAvatar', params)
+}
