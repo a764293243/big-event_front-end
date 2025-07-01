@@ -35,3 +35,7 @@ export const articleUpdateService = (articleData) => {
     return request.put('/article', articleData);
 }
 
+//文章删除
+export const articleDeleteService = (id) => {
+    return request.delete('/article?id=' + id);
+}

@@ -202,6 +202,33 @@ const inputArticle = (clickState) => {
     else if( drawerTitle == '修改文章' ) editArticle();
 
 } 
+
+//删除文章
+import { articleDeleteService } from '@/api/article'
+import { ElMessageBox } from 'element-plus'
+const deleteArticle = (row) => {
+    //提示用户
+    ElMessageBox.confirm(
+        '您确定要删除文章吗？',
+        '温馨提示',
+        {
+            confirmButtonText: '确认',
+            cancelButtonText: '取消',
+            type: 'warning'
+        }
+    )
+    .then(async () => {
+        //调用接口
+        console.log(row);
+        let result = articleDeleteService(row.id);
+        ElMessage.success('删除成功');
+        //刷新列表
+        articleList();
+    })
+    .catch(() => {
+        ElMessage.info('用户取消了删除');
+    })
+}
 onMounted(() => { 
     //开始时候调用
     articleCategoryList();
@@ -255,7 +282,7 @@ onMounted(() => {
             <el-table-column label="操作" width="100">
                 <template #default="{ row }">
                     <el-button :icon="Edit" circle plain type="primary" @click="editClick(row)"></el-button>
-                    <el-button :icon="Delete" circle plain type="danger"></el-button>
+                    <el-button :icon="Delete" circle plain type="danger" @click="deleteArticle(row)"></el-button>
                 </template>
             </el-table-column>
             <template #empty>
