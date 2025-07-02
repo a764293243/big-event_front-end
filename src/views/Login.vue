@@ -48,7 +48,7 @@ const rules = {
         // 必填项验证
         { required: true, message: '请输入密码', trigger: 'blur' },
         // 长度验证：5-16位字符
-        { min:5, max:16, massage:"长度为5~16位非空字符", trigger:"blur"}
+        { min:5, max:16, message:"长度为5~16位非空字符", trigger:"blur"}
     ],
     // 确认密码验证规则
     rePassword: [
@@ -119,10 +119,10 @@ const clearRegisterData = () => {
                     <el-input :prefix-icon="User" placeholder="请输入用户名" v-model="registerData.username"></el-input>
                 </el-form-item>
                 <el-form-item prop="password">
-                    <el-input :prefix-icon="Lock" type="password" placeholder="请输入密码" v-model="registerData.password"></el-input>
+                    <el-input :prefix-icon="Lock" type="password" placeholder="请输入密码" v-model="registerData.password" show-password></el-input>
                 </el-form-item>
                 <el-form-item prop="rePassword">
-                    <el-input :prefix-icon="Lock" type="password" placeholder="请输入再次密码" v-model="registerData.rePassword" ></el-input>
+                    <el-input :prefix-icon="Lock" type="password" placeholder="请输入再次密码" v-model="registerData.rePassword" show-password></el-input>
                 </el-form-item>
                 <!-- 注册按钮 -->
                 <el-form-item>
@@ -145,7 +145,7 @@ const clearRegisterData = () => {
                     <el-input :prefix-icon="User" placeholder="请输入用户名" v-model="registerData.username"></el-input>
                 </el-form-item>
                 <el-form-item prop="password">
-                    <el-input name="password" :prefix-icon="Lock" type="password" placeholder="请输入密码" v-model="registerData.password"></el-input>
+                    <el-input name="password" :prefix-icon="Lock" type="password" placeholder="请输入密码" v-model="registerData.password" show-password></el-input>
                 </el-form-item>
                 <el-form-item class="flex">
                     <div class="flex">

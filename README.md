@@ -103,6 +103,25 @@ npm run build
 - 删除 `src/utils/request.js` 第32行的多余return语句
 - 优化代码逻辑，确保每个分支都有明确的返回值
 
+### 表单prop与数据模型属性不对应问题 (已解决)
+**问题描述**: `src/views/user/UserResetPassword.vue` 中表单的prop属性与数据模型属性命名不一致
+
+**原因分析**:
+1. 数据模型使用下划线命名：`old_pwd`、`new_pwd`、`re_pwd`
+2. 表单校验规则和prop使用驼峰命名：`oldPassword`、`newPassword`、`rePassword`
+3. 这种不一致导致表单校验无法正常工作，代码可读性差
+
+**解决方案**:
+1. 统一使用驼峰命名法，符合Vue和JavaScript的命名规范
+2. 在API调用时将驼峰命名转换为后端期望的下划线格式
+3. 确保prop、数据模型、校验规则三者保持一致
+
+**修改内容**:
+- 数据模型属性改为驼峰命名：`oldPassword`、`newPassword`、`rePassword`
+- v-model绑定使用新的驼峰命名属性
+- 在updatePassword函数中添加数据格式转换逻辑
+- 保持校验规则和prop属性的一致性
+
 ## 注意事项
 
 1. 确保后端服务器运行在 `http://localhost:8080`
